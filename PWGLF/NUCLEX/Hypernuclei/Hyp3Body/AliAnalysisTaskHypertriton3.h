@@ -8,7 +8,6 @@
 #include "Math/Vector4D.h"
 #include "DCAFitterN.h"
 #include "Hypertriton3structures.h"
-#include "AliVertexerHyperTriton2Body.h"
 
 #include <TString.h>
 #include <AliMCEvent.h>
@@ -71,11 +70,9 @@ public:
   void SetEventMixingPoolDepth(int maxDepth) { fEventMixingPoolDepth = maxDepth; }
   void SetEventMixingPoolMaxReuse(int maxDepth) { fEventMixingPoolMaxReuse = maxDepth; }
 
-  int CheckPionCharge(std::vector<AliESDtrack *> tracks[2][2], AliESDv0 v0);
-
   AliEventCuts fEventCuts;                  /// Event cuts class
   AliESDtrackCuts fTrackCuts = *AliESDtrackCuts::GetStandardV0DaughterCuts(); /// Track cuts Object
-  int fCounter;
+
   o2::vertexing::DCAFitter3 fVertexer;
   o2::vertexing::DCAFitter2 fVertexerLambda;
   enum kProng { kDeuteron = 0, kProton = 1, kPion = 2 };
@@ -87,22 +84,17 @@ public:
   float fMinTrackDCA[3] = {0., 0., 0.};
   float fMaxTrack2TrackDCA[3] = {8.,8.,8.};
   float fMaxTrack2SVDCA[3] = {8.,8.,8.};
-  float fTPCsigmas[3] = {3.f, 3.f, 3.f};
+  float fTPCsigmas[3] = {3.5f, 3.5f, 3.5f};
   float fTOFsigmas[3] = {4.f, 4.f, 4.f};
   float fCandidateCtRange[2] = {0.f, 35.f};
   float fCandidatePtRange[2] = {1.f, 9.f};
   float fTrackPtRange[3][2] = {{0.f, 7.f},{0.f, 4.f},{0.f, 1.f}};
-  float fMinCosPA = 0.99;
+  float fMinCosPA = 0.9;
   bool  fUseAbsCosPAcut = true;
   bool  fOnlyTrueCandidates = false;
   bool  fLambdaCheck = true;
-  bool  fKF = false;
-  bool  fUseDoubleV0s = false;
   bool  fUseCovarianceCut = false;
-  float fMaxKFchi2[3] = {40000.,40000.,40000.};
   std::string fCosPAsplineName = "PWGLF/NUCLEX/HypertritonAnalysis/Cuts/spline3.root";
-  AliVertexerHyperTriton2Body fV0Vertexer;
-  int fTrackRotations = 0;
 
 
 private:
@@ -131,7 +123,6 @@ private:
   TH2D *fHistNSigmaP = nullptr;      //! # sigma TPC proton for the positive prong
   TH2D *fHistNSigmaPi = nullptr;     //! # sigma TPC pion for the negative prong
   TH2D *fHistInvMass = nullptr;      //! # Invariant mass histogram
-  TH1D *fHistDecVertexRes = nullptr; //! # decay vertex resolution
 
   float fDownscalingFactorByEvent = 1.;        // fraction of the events saved in the tree
   float fDownscalingFactorByCandidate = 1.;    // fraction of the candidates saved in the tree
@@ -140,7 +131,6 @@ private:
   unsigned int fEventMixingPoolDepth = 10;                     /// max depth of the event mixing pool
   int fEventMixingPoolMaxReuse = 2;
 
-  SHyperTriton3KF*   fGenHypKF = nullptr;
   SHyperTriton3O2*   fGenHypO2 = nullptr;
   RHyperTriton*   fRecHyp = nullptr;
 
